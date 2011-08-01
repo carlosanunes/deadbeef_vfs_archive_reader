@@ -10,18 +10,15 @@
 
 #define min(x,y) ((x)<(y)?(x):(y))
 
-#include "..//File_Extractor-1.0.0/fex/fex.h"
+#include "../File_Extractor-1.0.0/fex/fex.h"
 
 static DB_functions_t *deadbeef;
 static DB_vfs_t plugin;
 
 typedef struct {
     DB_FILE file;
-    fex_t* archive;
-    fex_pos_t pos;
-    int64_t size;
+    FILE* stream;
 } archive_file_t;
-
 
 static const char *scheme_names[] = { "rar://", "7z://", "gz://", NULL };
 
@@ -72,18 +69,29 @@ vfs_archive_reader_open (const char *fname) {
 		++n;
 		fex_next( fex );
 	}
-	// sanity check: are we at the end of the archive?
+	//  are we at the end of the archive?
 	if(fex_done(fex))
 		{ fex_close(fex); return NULL; }
 
-	if (fex_stat(fex) != NULL)
-		{ fex_close(fex); return NULL; }
+	char template[] = "/tmp/db.vfs.XXXXXX";
+	int tmp = mkstemp(template);
+	if ( tmp < 0 ) // could not create the tmpfile
+		return NULL;	
+	FILE * tmpFile = fdopen(tmp, "w+");
+	assert(tmpFile != NULL);	
+
+	// extracting to tmpfile
+	fex_stat(fex);
+	const void* data;
+	if ( fex_data( fex, &data ) != NULL )
+		assert( 0 );	
+	fwrite(data, sizeof(unsigned char), fex_size(fex), tmpFile);	
+
+	fex_close(fex);
 
     archive_file_t *f = malloc (sizeof (archive_file_t));
     memset (f, 0, sizeof (archive_file_t));
-    f->size = (int64_t) fex_size(fex);
-    f->archive = fex;
-    f->pos = fex_tell_arc(fex);
+    f->stream = tmpFile;
     f->file.vfs = &plugin;	
 
     return (DB_FILE*)f;
@@ -93,7 +101,7 @@ vfs_archive_reader_open (const char *fname) {
 void
 vfs_archive_reader_close (DB_FILE *f) {
 	archive_file_t *arc = (archive_file_t *)f;
-	fex_close(arc->archive);
+	fclose(arc->stream);
 	free(arc);
 }
 
@@ -101,87 +109,38 @@ size_t
 vfs_archive_reader_read (void *ptr, size_t size, size_t nmemb, DB_FILE *f) {
 	archive_file_t *arc = (archive_file_t *)f;
 
-	size_t rb = (size_t)fex_tell(arc->archive);
-	int n = min ( size * nmemb, arc->size - rb );	
-	assert ( fex_read( arc->archive, ptr, n ) == NULL);
-	rb = (size_t) fex_tell(arc->archive) - rb;
-
-// printf("read: %s readbytes: %i sz: %i psize:%i nmemb:%i fex_tell:%i\n", ptr, rb, n, size, nmemb, fex_tell(arc->archive));
-	return rb/size;
+	return fread (ptr, size, nmemb, arc->stream);
 }
 
 int
 vfs_archive_reader_seek (DB_FILE *f, int64_t offset, int whence) {
 	archive_file_t *arc = (archive_file_t *)f;
-/*
-switch( whence ) {
-	case SEEK_CUR:
-		printf("cur\n"); break;
-	case SEEK_END:
-		printf("end\n"); break;
-	case SEEK_SET:
-		printf("start\n"); break;
 
-}
-printf("seek offset: %i\n", offset);
-*/
-	int64_t tell = (int64_t) fex_tell(arc->archive); /* for better readibility */
-
-    if (whence == SEEK_CUR) {
-        offset += tell;
-    } else if (whence == SEEK_END) {
-        offset += (int64_t) arc->size;
-    }
-
-    /* have to go back in file */
-	if (offset < tell) {
-		// reopen
-		if (fex_seek_arc( arc->archive, arc->pos ) != NULL)
-			return -1;
-    }
-
-	char buf[4096];
-	// offset is the desired tell
-	int64_t n = offset - (int64_t) fex_tell(arc->archive);
-	while( n > 0 ) {
-		int64_t sz = min(n, sizeof(buf));
-	/* fex_read, tries to read n bytes even if there are not that many to read */
-		sz = min (sz, arc->size - fex_tell(arc->archive) );
-		assert(fex_read(arc->archive, buf, sz) == NULL);
-		// end of file
-		if ( sz < min (n, sizeof(buf)) )
-			break;
-
-		n = offset - (int64_t) fex_tell(arc->archive);
-	}
-
-//	printf("foffset %i\n", (int64_t) fex_tell(arc->archive));
-
-    if (n > 0) {
-        return -1;
-    }
-    return 0;
-
+    return fseek (arc->stream, offset, whence);
 }
 
 int64_t
 vfs_archive_reader_tell (DB_FILE *f) {
     archive_file_t *arc = (archive_file_t *)f;
-    return (int64_t) fex_tell( arc->archive );
+    return ftell (arc->stream);
 }
 
 
 void
 vfs_archive_reader_rewind (DB_FILE *f) {
 	archive_file_t *arc = (archive_file_t *)f;
-	assert (fex_seek_arc( arc->archive, arc->pos ) == NULL);
+	rewind (arc->stream);
 }
 
 
 int64_t
 vfs_archive_reader_getlength (DB_FILE *f) {
 	archive_file_t *arc = (archive_file_t *)f;
-    return arc->size;
+    size_t offs = ftell (arc->stream);
+    fseek (arc->stream, 0, SEEK_END);
+    size_t l = ftell (arc->stream);
+    fseek (arc->stream, offs, SEEK_SET);
+    return l;
 }
 
 /* getting the contents  */
