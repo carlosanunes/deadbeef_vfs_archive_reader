@@ -10,7 +10,7 @@
 
 #define min(x,y) ((x)<(y)?(x):(y))
 
-#include "../File_Extractor-1.0.0/fex/fex.h"
+#include "fex/fex/fex.h"
 
 static DB_functions_t *deadbeef;
 static DB_vfs_t plugin;
