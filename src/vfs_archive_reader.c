@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <assert.h>
 
-#define trace(...) { fprintf(stderr, __VA_ARGS__); }
-//#define trace(fmt,...)
+//#define trace(...) { fprintf(stderr, __VA_ARGS__); }
+#define trace(fmt,...)
 
 #define min(x,y) ((x)<(y)?(x):(y))
 
@@ -209,9 +209,24 @@ static DB_vfs_t plugin = {
     .plugin.name = "RAR, 7z and Gzip archive reader",
     .plugin.descr = "play files directly from rar,7z and gzip archive files",
     .plugin.copyright = 
-        "Carlos.\n"
+        "Copyright (c) 2011-2012 Carlos Nunes <carloslnunes@gmail.com>.\n"
+        "Uses the File_Extractor 1.0.0 library (C) Shay Green, http://code.google.com/p/file-extractor/ \n"
+        "\n"
+        "RAR, 7z and Gzip archive reader is free software; you can redistribute it and/or \n"
+        "modify it under the terms of the GNU Lesser General Public\n"
+        "License as published by the Free Software Foundation; either\n"
+        "version 2.1 of the License, or (at your option) any later version.\n"
+        "\n"
+        "RAR, 7z and Gzip archive reader is distributed in the hope that it will be useful,\n"
+        "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+        "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
+        "Lesser General Public License for more details.\n"
+        "\n"
+        "You should have received a copy of the GNU Lesser General Public\n"
+        "License along with this library; if not, write to the Free Software\n"
+        "Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA\n"
     ,
-    .plugin.website = "none",
+    .plugin.website = "http://subversion.assembla.com/svn/deadbeef_vfs_archive_reader/",
     .open = vfs_archive_reader_open,
     .close = vfs_archive_reader_close,
     .read = vfs_archive_reader_read,
@@ -226,7 +241,7 @@ static DB_vfs_t plugin = {
 };
 
 DB_plugin_t *
-vfs_archive_reader_load (DB_functions_t *api) {
+ddb_archive_reader_load (DB_functions_t *api) {
 
     deadbeef = api;
     return DB_PLUGIN (&plugin);
