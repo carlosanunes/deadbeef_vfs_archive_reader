@@ -224,8 +224,7 @@ static DB_vfs_t plugin = {
         "\n"
         "You should have received a copy of the GNU Lesser General Public\n"
         "License along with this library; if not, write to the Free Software\n"
-        "Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA\n"
-    ,
+        "Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA\n",
     .plugin.website = "http://subversion.assembla.com/svn/deadbeef_vfs_archive_reader/",
     .open = vfs_archive_reader_open,
     .close = vfs_archive_reader_close,
