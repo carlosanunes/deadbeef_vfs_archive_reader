@@ -20,7 +20,7 @@ install: all
 	mv $(OUT) ~/.local/lib/deadbeef/
 
 uninstall: 
-	rm ~/.local/lib/deadbeef/vfs_archive_reader.so
+	rm ~/.local/lib/deadbeef/$(OUT)
 
 clean:
 	rm -rf $(OUT)  *.a
