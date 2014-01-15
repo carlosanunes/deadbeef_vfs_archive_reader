@@ -184,19 +184,13 @@ vfs_archive_reader_scandir (const char *dir, struct dirent ***namelist, int (*se
                 return -1;
         
         int n = 0;
-        char * ext = NULL;
         while ( !fex_done(fex) )
         {
                 *namelist = realloc (*namelist, sizeof (void *) * (n+1) );
                 (*namelist)[n] = malloc (sizeof (struct dirent));
                 memset ((*namelist)[n], 0, sizeof (struct dirent));
-                if (fex_has_extension( dir, "rar" ))
-                        ext = "rar";
-                else if (fex_has_extension(dir, "gz"))
-                        ext = "gz";
-                else
-                        ext = "7z";
-                snprintf ((*namelist)[n]->d_name, sizeof ((*namelist)[n]->d_name), "%s://%s:%s", ext, dir, fex_name(fex) );
+
+                snprintf ((*namelist)[n]->d_name, sizeof ((*namelist)[n]->d_name), "%s", fex_name(fex) );
 
                 fex_next(fex);
                 ++n;
@@ -217,13 +211,18 @@ vfs_archive_reader_is_container (const char *fname) {
     return 0;
 }
 
+const char *
+vfs_archive_reader_get_scheme_for_name (const char * fname) {
+    return scheme_names[0];
+}
+
 /* boilerplate */
 
 static DB_vfs_t plugin = {
     .plugin.api_vmajor = 1,
-    .plugin.api_vminor = 0,
+    .plugin.api_vminor = 6,
     .plugin.version_major = 1,
-    .plugin.version_minor = 0,
+    .plugin.version_minor = 1,
     .plugin.type = DB_PLUGIN_VFS,
     .plugin.id = "vfs_archive_reader",
     .plugin.name = "RAR, 7z and Gzip archive reader",
@@ -257,6 +256,7 @@ static DB_vfs_t plugin = {
     .is_streaming = vfs_archive_reader_is_streaming,
     .is_container = vfs_archive_reader_is_container,
     .scandir = vfs_archive_reader_scandir,
+    .get_scheme_for_name = vfs_archive_reader_get_scheme_for_name,
 };
 
 DB_plugin_t *
