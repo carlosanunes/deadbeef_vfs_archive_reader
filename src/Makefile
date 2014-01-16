@@ -1,7 +1,7 @@
 CC?=gcc
 ZLIB_LIBS?=-lz
 CFLAGS+=-std=c99 -fPIC -Wall
-LDFLAGS+=-shared -lm $(ZLIB_LIBS)
+LDFLAGS+=-shared -lm $(ZLIB_LIBS) -I.
 MAKE=make
 OUT=ddb_archive_reader.so
 
