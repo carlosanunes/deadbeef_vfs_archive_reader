@@ -14,7 +14,7 @@
 		<string>https://subversion.assembla.com/svn/deadbeef_vfs_archive_reader</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>trunk/src/deadbeef_vfs_archive_reader.xcodeproj/project.xcworkspace</string>
+	<string>branches/dev/src/deadbeef_vfs_archive_reader.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>7A582C80-D135-4631-9C39-FA6E0A5BBD28</key>
