@@ -1,6 +1,6 @@
 /*
 	RAR, 7z and Gzip archive reader
-	Copyright (c) 2011-2012 Carlos Nunes <carloslnunes@gmail.com>.
+	Copyright (c) 2011-2016 Carlos Nunes <carloslnunes@gmail.com>.
 	Uses the File_Extractor 1.0.0 library (C) Shay Green, http://code.google.com/p/file-extractor/
 
 	RAR, 7z and Gzip archive reader is free software; you can redistribute it and/or
@@ -228,7 +228,7 @@ static DB_vfs_t plugin = {
     .plugin.name = "RAR, 7z and Gzip archive reader",
     .plugin.descr = "play files directly from rar,7z and gzip archive files",
     .plugin.copyright = 
-        "Copyright (c) 2011-2012 Carlos Nunes <carloslnunes@gmail.com>.\n"
+        "Copyright (c) 2011-2016 Carlos Nunes <carloslnunes@gmail.com>.\n"
         "Uses the File_Extractor 1.0.0 library (C) Shay Green, http://code.google.com/p/file-extractor/ \n"
         "\n"
         "RAR, 7z and Gzip archive reader is free software; you can redistribute it and/or \n"
