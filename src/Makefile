@@ -3,7 +3,13 @@ ZLIB_LIBS?=-lz
 CFLAGS+=-std=c99 -fPIC -Wall
 LDFLAGS+=-shared -lm $(ZLIB_LIBS) -I.
 MAKE=make
+
+OS :=$(shell uname)
+ifeq ($(OS), Darwin)
+OUT=ddb_archive_reader.dylib
+else
 OUT=ddb_archive_reader.so
+endif
 
 all: $(OUT)
 
