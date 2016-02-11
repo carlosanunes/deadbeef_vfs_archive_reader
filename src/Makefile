@@ -3,7 +3,6 @@ ZLIB_LIBS?=-lz
 CFLAGS+=-std=c99 -fPIC -Wall
 LDFLAGS+=-shared -lm $(ZLIB_LIBS) -I.
 MAKE=make
-BUILDDIR=../build/
 
 OS :=$(shell uname)
 ifeq ($(OS), Darwin)
