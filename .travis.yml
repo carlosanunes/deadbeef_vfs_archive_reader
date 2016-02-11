@@ -1,0 +1,15 @@
+language: c
+
+branches:
+    only:
+    - master
+
+os:
+    - linux
+    - osx
+
+script:
+    - ./travis/build.sh
+
+after_success:
+    - ./travis/upload.sh
