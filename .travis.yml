@@ -1,20 +1,14 @@
 language: c
-
+branches:
+  only:
+  - master
+os:
+- linux
+- osx
+script:
+- ./travis/build.sh
+after_success:
+- ./travis/upload.sh
 env:
   global:
-	- GH_REF: github.com/carlosanunes/deadbeef_vfs_archive_reader
-	- secure: "p5lRPAxYPtuWX526CDfIL9u6QVjS5XXGzvV8iXB2oFcJkp6v1sDVyNRQn8/f3HZoaIK+Rpnk/0CxDTq1OaOltAuZFatZe2zxUM34RmWUHAdx+PQaY5ik3QaFLCmVDtKw95wq0EWAmOyneNwuM4Br9+wqZQardpERrCS/smyceIj5tjC1bOIydptvs8QijKJfi19w4Huhq5kARpR69fWIiUM26zBFiBHJDvh/PPTJmGoffgFzG9zkmn0TbsjZSIOIEMk0Qhgk5zkiPOVctRs462Zd3xnBADuA1HG48pA/cfs4vqGzmaHdNXhxT2DsfxpPan681EA7x6yiuNh1hBqYR3FgMbVqIXjC/Dyux6nqalsuSjhQWBltlnvH971xt+wM+kqs30av7E/r+ed5KcrrogOcXCGU7kbCsbKQZRJHtLd0RIHQRpvvWiorQLW+k5HO0bn94vfDRBHECNW+dS15thR6orM3RKCwGmnk3WC/ZcQ0M8iOOgod12Xm/2dZkyqmmiBh4Orj/+r4I7E5LrbRo73tv0+pt1NJ5jTdAKF2qSJST8LvT0BQRBGBfgr94SYB1tW9+XlotAGzgY5Qgnn44iD1i2mHxXfD3BfOkaiGyjqh9gt07qjzTBlo1/OggoFSLmYZfm1rby2mqMVtiTj1Ogw2VkiFDHeTMXWmJpwNVXI="
-
-branches:
-    only:
-    - master
-
-os:
-    - linux
-    - osx
-
-script:
-    - ./travis/build.sh
-
-after_success:
-    - ./travis/upload.sh
+    secure: FufoIT63W3Kn0DD1YkI65E/yIfRBSJ50NBcdYgrXHwBwN7QgW+roWFCNoym1IbDlHUuWAJQ7XVrBbH/wIMdr4nPn4f5I81FuZAnxs6EEgbdy3kaILUu5Mf4zBqMO1D7A/V3hXW6+DnKiwfC5iiIbvWpm0DbQmhWeGS0LD8xrMjbC4QtYKyNQSGCS9G8tFYPA666nAEFcOKIV5eiB0z1FZmjpn2lxUKgjZXMQjhzsy2O+SX+84ILOQLCB9V0YWTfhne2BnAeco1wZg/kU2SmJI9BQfUm4PxLRpiBdVH6WhSngsdH1RErsvMFkbajA/d1ktUDjcRXJiCDlp3eefmntZiCN/M+UNplfAsc+6lVbPhqJoaynvyJLSRr5EnKXToPR2TK1rm76P2oTpYZk4aFYt80yXXHmXKs9M81WPW0Qhu1ZjMwnCoDmvgQrbYB9QdKxWUT8SxiYXwO81fpM+AZre/jYXPG70NHtiFkQ7FWOuDAxPfD/kGd6ZnoNiBWp+j4tVAnNYZzojZHn9FQ3evvZ/ueqxNZQnTfMP8EBzMsJXYIqMrnGbjVnsddUlfGuvH3EMVnsPG0wNMXqambVVQICyZ7l84njle9PTwSW8IvNIcaM0WVYsvmBofPo5ttgGrBZUPVWf+ru0yAuMEamy5/n3BEzUuiJNvAPuQ2MJtzEbOM=
