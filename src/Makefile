@@ -16,8 +16,11 @@ endif
 
 all: $(OUT)
 
-$(OUT): vfs_archive_reader.c libfex.a
+$(OUT): vfs_archive_reader.c libfex.a build_dir
 	$(CC) $(CFLAGS) vfs_archive_reader.c libfex.a $(LDFLAGS) -o $(BUILDDIR)/$(OUT)
+
+build_dir:
+	mkdir -p $(BUILDDIR)
 
 libfex.a: libfex
 	mv fex/libfex.a .
@@ -32,4 +35,4 @@ uninstall:
 	rm ~/.local/lib/deadbeef/$(OUT)
 
 clean:
-	rm -rf *.a $(BUILDDIR)/$(OUT)
+	rm -rf *.a $(BUILDDIR)
