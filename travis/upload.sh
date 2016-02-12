@@ -20,14 +20,5 @@ git config user.email "dummy@email.com"
 git add .
 git commit -m "Build push"
 
-case "$TRAVIS_OS_NAME" in
-	linux)
-		echo Uploading linux build
-		git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:linux_releases > /dev/null 2>&1
-	;;
-	osx)
-		echo Uploading osx build
-		git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:osx_releases > /dev/null 2>&1
-	;;
-esac
-
+echo uploading $TRAVIS_OS_NAME build
+git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:releases > /dev/null 2>&1
