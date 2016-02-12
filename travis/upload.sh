@@ -21,4 +21,4 @@ git add .
 git commit -m "Build push"
 
 echo uploading $TRAVIS_OS_NAME build
-git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:releases > /dev/null 2>&1
+git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:releases
