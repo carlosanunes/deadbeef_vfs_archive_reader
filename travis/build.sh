@@ -10,7 +10,7 @@ case "$TRAVIS_OS_NAME" in
         echo "building for x86_64"
         ARCH=x86_64 make || exit 1
         cd ../build/linux/
-        tar -jcfv ../build/linux/ddb_archive_reader_x86_64.tar.bz2 *.so || exit 1
+        tar -jcfv ddb_archive_reader_x86_64.tar.bz2 *.so || exit 1
         cd ../..
     ;;
     osx)
