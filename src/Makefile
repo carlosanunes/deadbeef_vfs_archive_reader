@@ -3,14 +3,13 @@ ZLIB_LIBS?=-lz
 CFLAGS+=-std=c99 -fPIC -Wall
 LDFLAGS+=-shared -lm $(ZLIB_LIBS) -I.
 MAKE=make
+BUILDDIR=.
 
 OS :=$(shell uname)
 ifeq ($(OS), Darwin)
 OUT=ddb_archive_reader.dylib
-BUILDDIR=../build/osx
 else
 OUT=ddb_archive_reader.so
-BUILDDIR=../build/linux
 endif
 
 all: $(OUT)
@@ -34,4 +33,4 @@ uninstall:
 	rm ~/.local/lib/deadbeef/$(OUT)
 
 clean:
-	rm -rf *.a $(BUILDDIR)
+	rm *.a $(BUILDDIR)/$(OUT)
