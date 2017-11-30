@@ -43,7 +43,13 @@ typedef struct {
 } archive_file_t;
 
 
-static const char *scheme_names[] = { "rar://", "7z://", "gz://", NULL };
+static const char *scheme_names[] = {
+    "rar://",
+    "7z://",
+    "gz://",
+    //"zip://",
+    NULL
+};
 
 const char **
 vfs_archive_reader_get_schemes (void) {
@@ -213,7 +219,23 @@ vfs_archive_reader_is_container (const char *fname) {
 
 const char *
 vfs_archive_reader_get_scheme_for_name (const char * fname) {
-    return scheme_names[0];
+    const char *ext = strrchr (fname, '.');
+    if (!ext) {
+        return NULL;
+    }
+    if (!strcasecmp (ext, ".rar")) {
+        return scheme_names[0];
+    }
+    if (!strcasecmp (ext, ".7z")) {
+        return scheme_names[1];
+    }
+    if (!strcasecmp (ext, ".gz")) {
+        return scheme_names[2];
+    }
+    //if (!strcasecmp (ext, ".zip")) {
+    //    return scheme_names[3];
+    //}
+    return NULL;
 }
 
 /* boilerplate */
