@@ -4,9 +4,9 @@
 all: libfex.a demo
 
 libfex.a: fex/fex.h fex/blargg_config.h
-	cd   fex;$(CXX) -I.. -c -Os -fno-rtti -fno-exceptions *.cpp -fPIC
-	cd unrar;$(CXX)      -c -Os -fno-rtti -fno-exceptions *.cpp -fPIC
-	cd  7z_C;$(CC)       -c -Os *.c -fPIC
+	cd   fex;$(CXX) -I.. -c -Os -fno-rtti -fno-exceptions *.cpp -fPIC -Wall
+	cd unrar;$(CXX)      -c -Os -fno-rtti -fno-exceptions *.cpp -fPIC -Wall
+	cd  7z_C;$(CC)       -c -Os *.c -fPIC -Wall
 	$(AR) $(ARFLAGS) libfex.a fex/*.o unrar/*.o 7z_C/*.o
 	-ranlib libfex.a 
 	-$(RM) fex/*.o
