@@ -1,6 +1,6 @@
 CC?=gcc
 ZLIB_LIBS?=-lz
-CFLAGS+=-std=c99 -fPIC -Wall
+CFLAGS+=-std=c99 -Wall
 LDFLAGS+=-shared -lm $(ZLIB_LIBS) -I.
 MAKE=make
 BUILDDIR=.
@@ -15,7 +15,7 @@ endif
 all: $(OUT)
 
 $(OUT): vfs_archive_reader.c libfex.a build_dir
-	$(CC) $(CFLAGS) vfs_archive_reader.c libfex.a $(LDFLAGS) -o $(BUILDDIR)/$(OUT)
+	$(CC) $(CFLAGS) vfs_archive_reader.c libfex.a -o $(BUILDDIR)/$(OUT) $(LDFLAGS)
 
 build_dir:
 	mkdir -p $(BUILDDIR)
