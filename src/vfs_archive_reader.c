@@ -43,13 +43,8 @@ typedef struct {
 } archive_file_t;
 
 
-static const char *scheme_names[] = {
-    "rar://",
-    "7z://",
-    "gz://",
-    //"zip://",
-    NULL
-};
+static const char *scheme_names[]    = { "rar://", "7z://", "gz://", "zip2://", NULL };
+static const char *file_extensions[] = { ".rar",   ".7z",   ".gz",   ".zip2",   NULL };
 
 const char **
 vfs_archive_reader_get_schemes (void) {
@@ -65,13 +60,18 @@ vfs_archive_reader_is_streaming (void) {
 DB_FILE*
 vfs_archive_reader_open (const char *fname) {
 
-        if ( (strncasecmp(fname, "rar://", 6) != 0 ) && (strncasecmp(fname, "7z://", 5) != 0 ) && (strncasecmp(fname, "gz://", 5) != 0  ))
-                { return NULL; }    
-
-    if (strncasecmp (fname, "rar://", 6) == 0)
-        fname += 6;
-    else
-        fname += 5;
+    int i = 0;
+    while(1) {
+        if (!scheme_names[i]) {
+            return NULL;
+        }
+        size_t len = strlen(scheme_names[i]);
+        if ( strncasecmp(fname, scheme_names[i], len) == 0 ) {
+            fname += len; //remove rar://, 7z://, gz://, etc
+            break;
+        }
+        i++;
+    }
 
     const char *colon = strchr (fname, ':');
     if (!colon) {
@@ -211,8 +211,13 @@ vfs_archive_reader_scandir (const char *dir, struct dirent ***namelist, int (*se
 int
 vfs_archive_reader_is_container (const char *fname) {
     const char *ext = strrchr (fname, '.');
-    if (ext && (!strcasecmp (ext, ".rar") || !strcasecmp (ext, ".gz") || !strcasecmp (ext, ".7z") )) {
-        return 1;
+    if (ext) {
+        int i;
+        for (i = 0; file_extensions[i]; i++ ) {
+            if ( !strcasecmp (ext, file_extensions[i]) ) {
+                return 1;  // ok
+            }
+        }
     }
     return 0;
 }
@@ -220,21 +225,14 @@ vfs_archive_reader_is_container (const char *fname) {
 const char *
 vfs_archive_reader_get_scheme_for_name (const char * fname) {
     const char *ext = strrchr (fname, '.');
-    if (!ext) {
-        return NULL;
+    if (ext) {
+        int i;
+        for (i = 0; file_extensions[i]; i++ ) {
+            if ( !strcasecmp (ext, file_extensions[i]) ) {
+                return scheme_names[i]; // ok
+            }
+        }
     }
-    if (!strcasecmp (ext, ".rar")) {
-        return scheme_names[0];
-    }
-    if (!strcasecmp (ext, ".7z")) {
-        return scheme_names[1];
-    }
-    if (!strcasecmp (ext, ".gz")) {
-        return scheme_names[2];
-    }
-    //if (!strcasecmp (ext, ".zip")) {
-    //    return scheme_names[3];
-    //}
     return NULL;
 }
 
